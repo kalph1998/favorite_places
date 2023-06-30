@@ -1,20 +1,26 @@
+import 'package:favorite_places/model/place.dart';
+import 'package:favorite_places/providers/place_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddPlace extends StatefulWidget {
+class AddPlace extends ConsumerStatefulWidget {
   const AddPlace({Key? key}) : super(key: key);
 
   @override
-  _AddPlaceState createState() => _AddPlaceState();
+  ConsumerState<AddPlace> createState() => _AddPlaceState();
 }
 
-class _AddPlaceState extends State<AddPlace> {
+class _AddPlaceState extends ConsumerState<AddPlace> {
   final _formKey = GlobalKey<FormState>();
   late String placeName;
 
   void onSave() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print(placeName);
+      ref.read(placeProvider).add(
+            Place(id: DateTime.now().toString(), title: placeName),
+          );
+      Navigator.of(context).pop();
     }
   }
 
