@@ -1,5 +1,6 @@
 import 'package:favorite_places/model/place.dart';
 import 'package:favorite_places/providers/place_provider.dart';
+import 'package:favorite_places/widgets/image_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -54,6 +55,10 @@ class _AddPlaceState extends ConsumerState<AddPlace> {
                   placeName = value!;
                 },
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              ImageInput(),
               const SizedBox(
                 height: 20,
               ),
