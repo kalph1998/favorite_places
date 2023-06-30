@@ -17,7 +17,7 @@ class _AddPlaceState extends ConsumerState<AddPlace> {
   void onSave() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      ref.read(placeProvider).add(
+      ref.read(placeProvider.notifier).addPlace(
             Place(id: DateTime.now().toString(), title: placeName),
           );
       Navigator.of(context).pop();
@@ -31,45 +31,45 @@ class _AddPlaceState extends ConsumerState<AddPlace> {
         title: const Text('Add new Place'),
       ),
       body: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                    label: Text('Title'),
-                  ),
-                  validator: (value) {
-                    if (value == null ||
-                        value.isEmpty ||
-                        value.trim().length <= 1 ||
-                        value.trim().length > 50) {
-                      return 'Please enter valid name';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    placeName = value!;
-                  },
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(
+                  label: Text('Title'),
                 ),
-                const SizedBox(
-                  height: 20,
+                validator: (value) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      value.trim().length <= 1 ||
+                      value.trim().length > 50) {
+                    return 'Please enter valid name';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  placeName = value!;
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                alignment: Alignment.center,
+                width: 130,
+                child: ElevatedButton.icon(
+                  onPressed: onSave,
+                  icon: const Icon(Icons.add),
+                  label: const Text('Add Place'),
                 ),
-                Container(
-                  alignment: Alignment.center,
-                  width: 130,
-                  child: ElevatedButton(
-                    onPressed: onSave,
-                    child: const Row(
-                      children: [Icon(Icons.add), Text('Add Place')],
-                    ),
-                  ),
-                )
-              ],
-            ),
-          )),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -5,36 +5,25 @@ import 'package:favorite_places/screens/place_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Home extends ConsumerStatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class PlacesScreen extends ConsumerWidget {
+  const PlacesScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<Home> createState() => _HomeState();
-}
-
-class _HomeState extends ConsumerState<Home> {
-  Future<void> gotoAddPlaces() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (ctx) => const AddPlace(),
-      ),
-    );
-    setState(() {});
-  }
-
-  void navigateToPlaceDetail() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => const PlaceDetail()));
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     List<Place> addedPlaces = ref.watch(placeProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Places'),
         actions: [
-          IconButton(onPressed: gotoAddPlaces, icon: const Icon(Icons.add))
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (ctx) => const AddPlace(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.add))
         ],
       ),
       body: addedPlaces.isEmpty
@@ -47,9 +36,18 @@ class _HomeState extends ConsumerState<Home> {
           : ListView.builder(
               itemBuilder: (ctx, index) {
                 return ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => PlaceDetail(
+                          selectedPlace: addedPlaces[index],
+                        ),
+                      ),
+                    );
+                  },
                   title: Text(
                     addedPlaces[index].title,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 );
               },

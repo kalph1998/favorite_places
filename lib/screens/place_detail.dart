@@ -1,10 +1,16 @@
+import 'package:favorite_places/model/place.dart';
 import 'package:flutter/material.dart';
 
 class PlaceDetail extends StatelessWidget {
-  const PlaceDetail({Key? key}) : super(key: key);
+  final Place selectedPlace;
+  const PlaceDetail({Key? key, required this.selectedPlace}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(selectedPlace.title),
+      ),
+    );
   }
 }
