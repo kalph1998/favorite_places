@@ -1,18 +1,22 @@
 import 'dart:convert';
 
+import 'package:favorite_places/model/place.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
+import '../keys/api_key.dart';
 
 class LocationInput extends StatefulWidget {
-  const LocationInput({Key? key}) : super(key: key);
+  const LocationInput({Key? key, required this.onSelectLocation})
+      : super(key: key);
+  final void Function(PlaceLocation location) onSelectLocation;
 
   @override
   State<LocationInput> createState() => _LocationInputState();
 }
 
 class _LocationInputState extends State<LocationInput> {
-  Location? _pickedLocation;
+  PlaceLocation? _pickedLocation;
   bool _isGettingLocation = false;
   void _getCurrentLocation() async {
     Location location = Location();
@@ -41,19 +45,23 @@ class _LocationInputState extends State<LocationInput> {
     });
 
     locationData = await location.getLocation();
+
     setState(() {
       _isGettingLocation = false;
     });
+
     final lat = locationData.latitude;
     final long = locationData.longitude;
-
     final uri = Uri.parse(
-        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$long&key=AIzaSyC6Ce9J0w7KmaQovnbwQvQ797FCd7xR2Us');
-
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$long&key=$googleKey');
     final response = await http.get(uri);
     final resData = json.decode(response.body);
     final address = resData['results'][0]['formatted_address'];
-    print(address);
+
+    _pickedLocation =
+        PlaceLocation(latitude: lat!, longitude: long!, address: address);
+
+    widget.onSelectLocation(_pickedLocation!);
   }
 
   @override

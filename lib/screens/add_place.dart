@@ -18,12 +18,18 @@ class _AddPlaceState extends ConsumerState<AddPlace> {
   final _formKey = GlobalKey<FormState>();
   late String placeName;
   File? selectedImage;
+  PlaceLocation? placeLocation;
 
   void onSave() {
-    if (_formKey.currentState!.validate() && selectedImage != null) {
+    if (_formKey.currentState!.validate() &&
+        selectedImage != null &&
+        placeLocation != null) {
       _formKey.currentState!.save();
       ref.read(placeProvider.notifier).addPlace(
-            Place(title: placeName, imageFile: selectedImage!),
+            Place(
+                title: placeName,
+                imageFile: selectedImage!,
+                location: placeLocation!),
           );
       Navigator.of(context).pop();
     }
@@ -70,7 +76,9 @@ class _AddPlaceState extends ConsumerState<AddPlace> {
               const SizedBox(
                 height: 20,
               ),
-              const LocationInput(),
+              LocationInput(
+                onSelectLocation: (location) => placeLocation = location,
+              ),
               const SizedBox(
                 height: 20,
               ),
