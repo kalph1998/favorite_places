@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:favorite_places/model/place.dart';
 import 'package:favorite_places/providers/place_provider.dart';
 import 'package:favorite_places/widgets/image_input.dart';
@@ -14,13 +16,16 @@ class AddPlace extends ConsumerStatefulWidget {
 class _AddPlaceState extends ConsumerState<AddPlace> {
   final _formKey = GlobalKey<FormState>();
   late String placeName;
+  File? selectedImage;
 
   void onSave() {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() && selectedImage != null) {
+      print('caled');
       _formKey.currentState!.save();
       ref.read(placeProvider.notifier).addPlace(
-            Place(id: DateTime.now().toString(), title: placeName),
+            Place(title: placeName, imageFile: selectedImage!),
           );
+
       Navigator.of(context).pop();
     }
   }
@@ -58,7 +63,11 @@ class _AddPlaceState extends ConsumerState<AddPlace> {
               const SizedBox(
                 height: 20,
               ),
-              ImageInput(),
+              ImageInput(
+                onSelectImage: (File image) {
+                  selectedImage = image;
+                },
+              ),
               const SizedBox(
                 height: 20,
               ),
