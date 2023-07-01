@@ -20,12 +20,10 @@ class _AddPlaceState extends ConsumerState<AddPlace> {
 
   void onSave() {
     if (_formKey.currentState!.validate() && selectedImage != null) {
-      print('caled');
       _formKey.currentState!.save();
       ref.read(placeProvider.notifier).addPlace(
             Place(title: placeName, imageFile: selectedImage!),
           );
-
       Navigator.of(context).pop();
     }
   }
