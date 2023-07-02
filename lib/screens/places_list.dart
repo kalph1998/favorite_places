@@ -16,14 +16,15 @@ class PlacesScreen extends ConsumerWidget {
         title: const Text('Your Places'),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (ctx) => const AddPlace(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.add))
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => const AddPlace(),
+                ),
+              );
+            },
+            icon: const Icon(Icons.add),
+          )
         ],
       ),
       body: addedPlaces.isEmpty
@@ -47,13 +48,20 @@ class PlacesScreen extends ConsumerWidget {
                         ),
                       );
                     },
+                    subtitle: Text(
+                      addedPlaces[index].location.address,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground),
+                    ),
                     leading: CircleAvatar(
                       radius: 26,
                       backgroundImage: FileImage(addedPlaces[index].imageFile),
                     ),
                     title: Text(
                       addedPlaces[index].title,
-                      style: Theme.of(context).textTheme.titleMedium,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: Theme.of(context).colorScheme.onBackground,
+                          ),
                     ),
                   );
                 },

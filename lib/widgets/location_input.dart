@@ -18,6 +18,16 @@ class LocationInput extends StatefulWidget {
 class _LocationInputState extends State<LocationInput> {
   PlaceLocation? _pickedLocation;
   bool _isGettingLocation = false;
+
+  String get locationImage {
+    if (_pickedLocation == null) {
+      return '';
+    }
+    var lat = _pickedLocation!.latitude;
+    var long = _pickedLocation!.longitude;
+    return 'https://maps.googleapis.com/maps/api/staticmap?center$lat,$long&zoom=16&size=600x300&maptype=roadmap&markers=color:red%7Clabel:S%7C$lat,$long&key=$googleKey';
+  }
+
   void _getCurrentLocation() async {
     Location location = Location();
     bool serviceEnabled;
@@ -46,21 +56,23 @@ class _LocationInputState extends State<LocationInput> {
 
     locationData = await location.getLocation();
 
-    setState(() {
-      _isGettingLocation = false;
-    });
-
     final lat = locationData.latitude;
     final long = locationData.longitude;
+
+    if (lat == null && long == null) {
+      return;
+    }
     final uri = Uri.parse(
         'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$long&key=$googleKey');
     final response = await http.get(uri);
     final resData = json.decode(response.body);
     final address = resData['results'][0]['formatted_address'];
 
-    _pickedLocation =
-        PlaceLocation(latitude: lat!, longitude: long!, address: address);
-
+    setState(() {
+      _isGettingLocation = false;
+      _pickedLocation =
+          PlaceLocation(latitude: lat!, longitude: long!, address: address);
+    });
     widget.onSelectLocation(_pickedLocation!);
   }
 
@@ -76,6 +88,13 @@ class _LocationInputState extends State<LocationInput> {
 
     if (_isGettingLocation) {
       previewContent = const CircularProgressIndicator();
+    }
+    if (_pickedLocation != null) {
+      previewContent = Image.network(
+        locationImage,
+        fit: BoxFit.cover,
+        width: double.infinity,
+      );
     }
 
     return Column(
