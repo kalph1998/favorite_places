@@ -52,11 +52,13 @@ class _MapScreenState extends State<MapScreen> {
           target: LatLng(widget.location.latitude, widget.location.longitude),
           zoom: 16,
         ),
-        onTap: (position) {
-          setState(() {
-            _pickedLocation = position;
-          });
-        },
+        onTap: !widget.isSelecting
+            ? null
+            : (position) {
+                setState(() {
+                  _pickedLocation = position;
+                });
+              },
         myLocationEnabled: true,
         markers: _pickedLocation == null && widget.isSelecting
             ? {}
