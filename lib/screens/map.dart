@@ -19,6 +19,17 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   LatLng? _pickedLocation;
+  late GoogleMapController mapController;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +47,7 @@ class _MapScreenState extends State<MapScreen> {
         ],
       ),
       body: GoogleMap(
+        onMapCreated: _onMapCreated,
         initialCameraPosition: CameraPosition(
           target: LatLng(widget.location.latitude, widget.location.longitude),
           zoom: 16,
@@ -45,6 +57,7 @@ class _MapScreenState extends State<MapScreen> {
             _pickedLocation = position;
           });
         },
+        myLocationEnabled: true,
         markers: _pickedLocation == null && widget.isSelecting
             ? {}
             : {

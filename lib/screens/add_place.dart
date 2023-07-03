@@ -43,55 +43,57 @@ class _AddPlaceState extends ConsumerState<AddPlace> {
       ),
       body: Form(
         key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  label: Text('Title'),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TextFormField(
+                  decoration: const InputDecoration(
+                    label: Text('Title'),
+                  ),
+                  validator: (value) {
+                    if (value == null ||
+                        value.isEmpty ||
+                        value.trim().length <= 1 ||
+                        value.trim().length > 50) {
+                      return 'Please enter valid name';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    placeName = value!;
+                  },
                 ),
-                validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      value.trim().length <= 1 ||
-                      value.trim().length > 50) {
-                    return 'Please enter valid name';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  placeName = value!;
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ImageInput(
-                onSelectImage: (File image) {
-                  selectedImage = image;
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              LocationInput(
-                onSelectLocation: (location) => placeLocation = location,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                alignment: Alignment.center,
-                width: 130,
-                child: ElevatedButton.icon(
-                  onPressed: onSave,
-                  icon: const Icon(Icons.add),
-                  label: const Text('Add Place'),
+                const SizedBox(
+                  height: 20,
                 ),
-              )
-            ],
+                ImageInput(
+                  onSelectImage: (File image) {
+                    selectedImage = image;
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                LocationInput(
+                  onSelectLocation: (location) => placeLocation = location,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  width: 130,
+                  child: ElevatedButton.icon(
+                    onPressed: onSave,
+                    icon: const Icon(Icons.add),
+                    label: const Text('Add Place'),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
